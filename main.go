@@ -36,8 +36,8 @@ func loadEnvVars(cfg *ldap.Config) *ldap.Config {
   return cfg
 }
 
-func Auth () gin.HandlerFunc {
-  ldapInit()
+func Auth (ttl int) gin.HandlerFunc {
+  ldapInit(ttl)
   return func(c *gin.Context) {
     auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
     var realm string
@@ -64,13 +64,13 @@ func Auth () gin.HandlerFunc {
   }
 }
 
-func ldapInit() {
+func ldapInit(ttl int) {
   cfg := &ldap.Config{
     Port: "389",
   }
   cfg = loadEnvVars(cfg)
 	cacheObj = libcache.FIFO.New(0)
-	cacheObj.SetTTL(time.Minute * 5)
+	cacheObj.SetTTL(time.Minute * ttl)
 	cacheObj.RegisterOnExpired(func(key, _ interface{}) {
 		cacheObj.Peek(key)
 	})
