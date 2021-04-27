@@ -36,7 +36,7 @@ func loadEnvVars(cfg *ldap.Config) *ldap.Config {
   return cfg
 }
 
-func Auth (ttl int) gin.HandlerFunc {
+func Auth (ttl time.Duration) gin.HandlerFunc {
   ldapInit(ttl)
   return func(c *gin.Context) {
     auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
