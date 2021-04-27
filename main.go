@@ -64,7 +64,7 @@ func Auth (ttl int) gin.HandlerFunc {
   }
 }
 
-func ldapInit(ttl int) {
+func ldapInit(ttl time.Duration) {
   cfg := &ldap.Config{
     Port: "389",
   }
